@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "jade-coral-tool",
+  "account_id": "c5b188260edd86e98be165c3dbea4015",
+  "main": "worker/index.js",
+  "compatibility_date": "2025-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/p/*", "/c/*", "/img/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "jade-coral-db",
+      "database_id": "14d94b86-6690-4119-89f6-6df96f3d21dc",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [{ "binding": "PHOTOS", "bucket_name": "jade-coral-photos" }],
+  "vars": { "MODEL": "claude-sonnet-5-5" },
+  "observability": { "enabled": true }
+}

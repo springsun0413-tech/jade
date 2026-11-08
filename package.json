@@ -1,0 +1,28 @@
+{
+  "name": "jade-coral-tool",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "vite build && wrangler dev",
+    "dev:ui": "vite",
+    "build": "vite build",
+    "db:init:local": "wrangler d1 migrations apply jade-coral-db --local",
+    "db:init:remote": "wrangler d1 migrations apply jade-coral-db --remote",
+    "deploy": "vite build && wrangler deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.2.1",
+    "vite": "^8.3.6",
+    "wrangler": "^4.158.0"
+  },
+  "private": true,
+  "type": "module"
+}

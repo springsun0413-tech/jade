@@ -1,0 +1,5 @@
+# 複製成 .dev.vars 給本機開發用（不要 commit）
+EDIT_PASSWORD=change-me
+ANTHROPIC_API_KEY=
+# 設 1 = 不呼叫 Claude，回傳假資料，方便測試介面
+MOCK_AI=1
