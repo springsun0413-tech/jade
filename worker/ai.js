@@ -68,7 +68,8 @@ ${settings.style_example ? `\n參考以下賣家過去的文案語氣（只模�
         },
       },
     ],
-    tool_choice: { type: 'tool', name: 'save_item' },
+    // 部分新模型不支援強制指定工具，用 auto 並在提示詞要求呼叫
+    tool_choice: { type: 'auto' },
     messages: [{ role: 'user', content }],
   };
 
@@ -87,9 +88,18 @@ ${settings.style_example ? `\n參考以下賣家過去的文案語氣（只模�
     throw httpError(502, `AI 服務錯誤（${res.status}），請稍後再試`);
   }
   const data = await res.json();
-  const tool = (data.content || []).find((b) => b.type === 'tool_use');
-  if (!tool) throw httpError(502, 'AI 沒有回傳結果，請再試一次');
-  return sanitize(tool.input, cat, hasCert);
+  const tool = (data.content || []).find((b) => b.type === 'tool_use' && b.name === 'save_item');
+  if (tool) return sanitize(tool.input, cat, hasCert);
+  // 備援：模型直接回 JSON 文字
+  const text = (data.content || []).filter((b) => b.type === 'text').map((b) => b.text).join('\n');
+  const m = text.match(/\{[\s\S]*\}/);
+  if (m) {
+    try {
+      return sanitize(JSON.parse(m[0]), cat, hasCert);
+    } catch {}
+  }
+  console.error('Claude no tool_use', JSON.stringify(data).slice(0, 2000));
+  throw httpError(502, 'AI 沒有回傳結果，請再試一次');
 }
 
 function sanitize(r, cat, hasCert) {
